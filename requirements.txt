@@ -1,0 +1,6 @@
+discord
+nltk
+tensorflow
+numpy
+tflearn
+pickle
