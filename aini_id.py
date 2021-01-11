@@ -1,7 +1,8 @@
 import nltk
 from nltk import stem
-from nltk.stem.lancaster import LancasterStemmer
-stemmer = LancasterStemmer()
+#from nltk.stem.lancaster import LancasterStemmer
+from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
+stemmer = StemmerFactory()
 
 import numpy as np
 import tflearn
@@ -95,17 +96,13 @@ except:
     
 def bag_of_words(s,words):
     print("Jumlah Kata :",len(words))
-    print(enumerate(words))
     bag = [0 for _ in range(len(words))]
     s_words = nltk.word_tokenize(s)
-    print("before stem words :",s_words)
     s_words = [stemmer.stem(word.lower()) for word in s_words]
-    print("after stem words :",s_words)
+
     for se in s_words:
         for i,w in enumerate(words):
-            #print(w)
             if w == se:
-                print("vector of bag :",w)
                 bag[i] = 1
 
     return np.array(bag)
@@ -116,10 +113,7 @@ def chat():
         inp = input("You: ")
         if inp.lower() == "quit":
             break
-        
-        print("Bag of words :",bag_of_words(inp,words))
-        print("Num of words :",len(bag_of_words(inp,words)))
-        
+
         results = model.predict([bag_of_words(inp,words)])[0]
         results_index = np.argmax(results)
         tag = labels[results_index]
@@ -131,7 +125,7 @@ def chat():
             for tg in data["intents"]:
                 if tg['tag']==tag:
                     responses = tg['responses']
-                    print(random.choice(responses))
+            print(random.choice(responses))
         else:
             print("I don't understand dude, please try again")
 chat()
